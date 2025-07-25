@@ -1,0 +1,8 @@
+POST http://localhost:3000/api/tournaments
+Content-Type: application/json
+
+{
+  "name": "IPL 2025",
+  "matchType": "league",
+  "startDate": "2025-03-22"
+}
