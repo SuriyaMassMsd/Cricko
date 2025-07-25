@@ -3,6 +3,7 @@ const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const tournamentRoutes = require("./routes/tournamentRoutes");
+const Players = require("./models/Players");
 
 // Load .env file
 dotenv.config();
@@ -20,6 +21,16 @@ app.get("/", (req, res) => {
     message: "Welcome to Cricko Scorer!",
   });
 });
+
+app.get("/players/:teamId", async (req, res) => {
+  try {
+    const players = await Players.find({ team: req.params.teamId });
+    res.status(200).json(players);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch players" });
+  }
+});
+
 app.use("/api/tournaments", tournamentRoutes);
 
 // Start server only after DB connects

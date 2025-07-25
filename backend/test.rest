@@ -1,8 +1,12 @@
-POST http://localhost:3000/api/tournaments
-Content-Type: application/json
 
-{
-  "name": "IPL 2025",
-  "matchType": "league",
-  "startDate": "2025-03-22"
-}
+GET http://localhost:3000/players/68838b41e78b117ea02b8a3e
+# Content-Type: application/json
+
+# {
+#   "playerName" : "Mr.Prince",
+#       "role" : "batsman",
+#       "battingStyle" : "right",
+#       "bowlingStyle" : "right",
+#       "jerseyNumber" : "7",
+#       "teamId" : "68838b41e78b117ea02b8a3e"
+# }
