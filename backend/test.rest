@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 GET http://localhost:3000/players/68838b41e78b117ea02b8a3e
 # Content-Type: application/json

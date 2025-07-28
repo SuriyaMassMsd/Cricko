@@ -1,9 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 
 const App = () => {
-  return (
-    <div>App</div>
-  )
-}
+  const [teams, setTeams] = useState();
+  const apiBaseUrl = import.meta.env.VITE_BASE_URL;
 
-export default App
+  console.log(apiBaseUrl);
+
+  const fetchTeams = async () => {
+    try {
+      const response = await fetch(`${apiBaseUrl}/getTeams`);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+  return <div>App</div>;
+};
+
+export default App;

@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const tournamentRoutes = require("./routes/tournamentRoutes");
 const Players = require("./models/Players");
+const cors = require("cors");
 
 // Load .env file
 dotenv.config();
@@ -14,7 +15,7 @@ const MONGO_DB = process.env.DB_CONNECT;
 
 // Middleware (optional if you're sending JSON later)
 app.use(express.json());
-
+app.use(cors());
 // Root route
 app.get("/", (req, res) => {
   res.status(200).json({
