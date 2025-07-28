@@ -14,3 +14,12 @@ exports.createTournament = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getTournaments = async (req, res) => {
+  try {
+    const getMatch = await tournament.find({});
+    res.status(200).json({ match: getMatch });
+  } catch (e) {
+    res.status(500).json({ error: err.message });
+  }
+};

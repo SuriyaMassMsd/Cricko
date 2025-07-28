@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 GET http://localhost:3000/players/68838b41e78b117ea02b8a3e
 # Content-Type: application/json
@@ -10,3 +11,26 @@ GET http://localhost:3000/players/68838b41e78b117ea02b8a3e
 #       "jerseyNumber" : "7",
 #       "teamId" : "68838b41e78b117ea02b8a3e"
 # }
+=======
+# GET http://localhost:3000/api/tournaments/getMatch
+
+
+
+
+
+
+
+
+
+GET  http://localhost:3000/api/tournaments/getTeamPlayer/68838b41e78b117ea02b8a3e
+# Content-Type: application/json
+
+# {
+#   "playerName" : "Ajirohi",
+#       "role" : "all-rounder",
+#       "battingStyle" : "right",
+#       "bowlingStyle" : "right",
+#       "jerseyNumber" : "45",
+#       "teamId" : "68838b41e78b117ea02b8a3e"
+# }
+>>>>>>> ae1969f (cricko player added with team)
