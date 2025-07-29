@@ -1,4 +1,3 @@
-
 POST http://localhost:3000/api/tournaments/createPlayer
 Content-Type: application/json
 
