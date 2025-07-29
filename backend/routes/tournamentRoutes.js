@@ -14,7 +14,7 @@ const {
   createPlayers,
   getPlayerByTeams,
 } = require("../controllers/playersController");
-router.post("/", createTournament);
+router.post("/createTournament", createTournament);
 router.post("/createTeam", createTeam);
 router.post("/createPlayer", createPlayers);
 router.get("/getMatch", getTournaments);

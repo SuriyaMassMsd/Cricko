@@ -1,35 +1,12 @@
 
-GET http://localhost:3000/players/68838b41e78b117ea02b8a3e
-# Content-Type: application/json
+POST http://localhost:3000/api/tournaments/createPlayer
+Content-Type: application/json
 
-# {
-#   "playerName" : "Mr.Prince",
-#       "role" : "batsman",
-#       "battingStyle" : "right",
-#       "bowlingStyle" : "right",
-#       "jerseyNumber" : "7",
-#       "teamId" : "68838b41e78b117ea02b8a3e"
-# }
-=======
-# GET http://localhost:3000/api/tournaments/getMatch
-
-
-
-
-
-
-
-
-
-GET  http://localhost:3000/api/tournaments/getTeamPlayer/68838b41e78b117ea02b8a3e
-# Content-Type: application/json
-
-# {
-#   "playerName" : "Ajirohi",
-#       "role" : "all-rounder",
-#       "battingStyle" : "right",
-#       "bowlingStyle" : "right",
-#       "jerseyNumber" : "45",
-#       "teamId" : "68838b41e78b117ea02b8a3e"
-# }
->>>>>>> ae1969f (cricko player added with team)
+{
+  "playerName" : "Mr.Great",
+      "role" : "batsman",
+      "battingStyle" : "right",
+      "bowlingStyle" : "right",
+      "jerseyNumber" : "2",
+      "teamId" : "688842cf139c60cea041f9a2"
+}

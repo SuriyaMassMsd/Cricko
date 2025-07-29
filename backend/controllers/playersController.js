@@ -31,8 +31,8 @@ exports.createPlayers = async (req, res) => {
 
 exports.getPlayerByTeams = async (req, res) => {
   try {
-    const { teamId } = req.params.teamId;
-    const players = await Players.find(teamId);
+    const teamId = req.params.teamId;
+    const players = await Players.find({ teamId });
     res.status(200).json(players);
   } catch (e) {
     res.status(500).json({ error: e.message });
