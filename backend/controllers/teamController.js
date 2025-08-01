@@ -6,7 +6,7 @@ exports.createTeam = async (req, res) => {
     const creatingTeam = await teamSchema.create({ teamName });
     res.status(201).json({ message: "Team Created Successfully", teamName });
   } catch (e) {
-    res.status(500).json({ error: err.message });
+    // res.status(500).json({ error: err.message });
 
     res.status(500).json({ error: e.message });
   }
