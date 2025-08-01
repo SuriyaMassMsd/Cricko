@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { mutate } from "swr";
+// import { mutate } from "swr";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,7 +20,15 @@ const App = () => {
     register,
     formState: { errors },
     reset,
-  } = useForm(reslover);
+    handleSubmit,
+  } = useForm({
+    reslover: zodResolver(formSchema),
+    defaultValues: {
+      name: "Kova Kight Riders",
+      matchType: "league",
+      startDate: new Date().toISOString().split("T")[0],
+    },
+  });
 
   const navigate = useNavigate();
 
@@ -35,7 +43,7 @@ const App = () => {
       if (response.ok) {
         setTeams(data);
       }
-      mutate();
+      // mutate();
     } catch (e) {}
   };
 
@@ -43,17 +51,17 @@ const App = () => {
     fetchTeams();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (teamName) {
+  const submitData = async (datas) => {
+    console.log(datas);
+    const { name, matchType, startDate } = datas;
+    if (datas) {
       try {
         const response = await fetch(`${apiBaseUrl}/createTournament`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ teamName }),
+          body: JSON.stringify({ name, matchType, startDate }),
         });
 
         const data = await response.json();
@@ -74,9 +82,22 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="px-20">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-semibold py-4">
+          Welcome to <span className="text-red-500 font-semibold">Cricko</span>{" "}
+          Cricket Scorer
+        </h1>
+        <div
+          onClick={() => setModelBg(!modelBg)}
+          title="add team"
+          className="font-semibold px-6 py-2 bg-green-500 text-white cursor-pointer rounded hover:bg-yellow-600 duration-700 ease-in-out 2s"
+        >
+          Create Tournament
+        </div>
+      </div>
       {modelBg && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center">
+        <div className="fixed inset-0 z-40 flex items-center justify-center ">
           <div
             onClick={() => setModelBg(false)}
             className="absolute inset-0 bg-black opacity-45"
@@ -92,28 +113,71 @@ const App = () => {
               Create Tournament
             </h1>
             <form
-              className="flex flex-col gap-4 justify-start items-start"
-              onSubmit={handleSubmit}
+              className="flex flex-col gap-4 justify-start items-start w-full max-w-md mx-auto p-4"
+              onSubmit={handleSubmit(submitData)}
             >
-              <label htmlFor="teamName" className="font-medium ">
+              {/* Team Name */}
+              <label htmlFor="name" className="font-medium">
                 Enter Team Name
               </label>
               <input
-                id="teamName"
-                value={teamName}
-                placeholder="enter your team name"
-                onChange={(e) => setTeamName(e.target.value)}
+                id="name"
                 type="text"
-                className="px-8 py-2 rounded bg-gray-200 w-full border-none outline-none"
+                placeholder="Enter your team name"
+                {...register("name")}
+                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
               />
-              <div className="flex w-full gap-4">
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              )}
+
+              {/* Match Type */}
+              <label htmlFor="matchType" className="font-medium">
+                Match Type
+              </label>
+              <select
+                id="matchType"
+                {...register("matchType")}
+                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
+              >
+                <option value="league">League</option>
+                <option value="knockout">Knockout</option>
+                <option value="tri-series">Tri-series</option>
+                <option value="series">Series</option>
+                <option value="single">Single</option>
+              </select>
+              {errors.matchType && (
+                <p className="text-red-500 text-sm">
+                  {errors.matchType.message}
+                </p>
+              )}
+
+              {/* Start Date */}
+              <label htmlFor="startDate" className="font-medium">
+                Start Date
+              </label>
+              <input
+                id="startDate"
+                type="date"
+                {...register("startDate")}
+                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
+              />
+              {errors.startDate && (
+                <p className="text-red-500 text-sm">
+                  {errors.startDate.message}
+                </p>
+              )}
+
+              {/* Buttons */}
+              <div className="flex w-full gap-4 pt-2">
                 <button
+                  type="button"
                   onClick={handleReset}
-                  className="px-6 py-2 bg-blue-900 cursor-pointer w-full rounded-xl text-white font-medium"
+                  className="px-6 py-2 bg-blue-900 w-full rounded-xl text-white font-medium"
                 >
                   Reset
                 </button>
-                <button className="px-6 py-2 bg-green-600 cursor-pointer w-full rounded-xl text-white font-medium">
+                <button className="px-6 py-2 bg-green-600 w-full rounded-xl text-white font-medium">
                   Submit
                 </button>
               </div>
@@ -122,35 +186,30 @@ const App = () => {
         </div>
       )}
 
-      <div className="flex justify-center py-10 items-center gap-10">
+      <div className="justify-center py-10 items-center gap-10 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] ">
         {teams?.match?.map(({ _id: id, name, matchType }) => {
           return (
             <div
               key={id}
               onClick={() => handleClick(id)}
-              className="hover:scale-105 cursor-pointer transition-all 2s ease-in-out bg-gray-300 rounded w-[300px] h-[350px]  relative"
+              className="cursor-pointer shadow-md hover:shadow-lg transition-shadow  2s ease-in-out duration-300 rounded-lg overflow-hidden bg-white  relative "
             >
               <img
-                className="w-full h-auto rounded"
+                className="w-full h-60 rounded object-cover"
                 src="https://imgs.search.brave.com/phfVb1Zyb6Cv4QipBqD14ULbqaGansDSe6X6O7WDp14/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTQy/NjI5NTMyNS92ZWN0/b3IvY3JpY2tldC10/b3VybmFtZW50LWNo/YW1waW9uc2hpcC1n/cmVldGluZy1jYXJk/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz05WDI3OHA3dXpv/VldMWW45TVF0cnh1/RlVvY0ZrRU8wcUdV/em5Tck1yWHhnPQ"
                 alt=""
               />
               <div className="px-10 py-6">
-                <h1 className="text-[20px] font-semibold text-black">{name}</h1>
-                <span className="absolute -top-0 -right-0 px-3 py-1.5 rounded bg-[#0ead69] text-white font-semibold">
+                <h1 className="text-[20px] font-semibold text-black truncate">
+                  {name}
+                </h1>
+                <span className="absolute  px-3 py-1.5 rounded bg-[#0ead69] text-white font-semibold top-3 right-3 text-xs uppercase tracking-wide">
                   {matchType ? matchType : "dummy"}
                 </span>
               </div>
             </div>
           );
         })}
-        <div
-          onClick={() => setModelBg(!modelBg)}
-          className="bg-gray-300 w-16 h-16 rounded-full text-[50px] flex justify-center items-center cursor-pointer "
-          title="add team"
-        >
-          +
-        </div>
       </div>
     </div>
   );
