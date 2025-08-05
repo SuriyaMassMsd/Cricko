@@ -13,10 +13,11 @@ const {
 const {
   createPlayers,
   getPlayerByTeams,
+  upload,
 } = require("../controllers/playersController");
 router.post("/createTournament", createTournament);
 router.post("/createTeam", createTeam);
-router.post("/createPlayer", createPlayers);
+router.post("/createPlayer", upload, createPlayers);
 router.get("/getMatch", getTournaments);
 router.get("/getTeams", getTeams);
 router.get("/getTeams/:teamId", getTeamById);
