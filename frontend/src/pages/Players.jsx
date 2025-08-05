@@ -106,129 +106,154 @@ const Players = () => {
           ></div>
 
           {/* Modal Box */}
-          <div className="relative z-50 w-full max-w-lg bg-white shadow-xl rounded-xl px-8 py-6 mx-4">
+          <div className="relative z-50 w-full max-w-xl bg-white shadow-xl rounded-xl px-10 py-8 ">
             {/* Close Button */}
             <button
               onClick={() => setModelBg(false)}
-              className="absolute top-3 right-3 bg-gray-900 text-white text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-700 transition"
+              className="absolute top-3 right-3 bg-gray-900 text-white text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-700 transition cursor-pointer"
             >
               ×
             </button>
 
             {/* Modal Title */}
-            <h1 className="text-2xl font-semibold text-center pb-4">
-              Create Tournament
-            </h1>
+            <div className="flex justify-center items-center">
+              <h1 className="text-2xl font-semibold text-center pb-4">
+                Create Player
+              </h1>
+              <img
+                src="/ipl-logo.png"
+                alt="player with bat"
+                className="w-14 h-auto"
+              />
+            </div>
 
             {/* Form */}
             <form
-              className="flex flex-col gap-4 justify-start items-start w-full max-w-md mx-auto p-4"
+              className="flex flex-col gap-4 justify-start items-start w-full max-w-lg mx-auto "
               onSubmit={handleSubmit(submitData)}
             >
-              {/* Player Name */}
-              <label htmlFor="playerName" className="font-medium">
-                Player Name
-              </label>
-              <input
-                id="playerName"
-                type="text"
-                placeholder="Enter player name"
-                {...register("playerName", {
-                  required: "Player name is required",
-                })}
-                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
-              />
-              {errors.playerName && (
-                <p className="text-red-500 text-sm">
-                  {errors.playerName.message}
-                </p>
-              )}
+              <div className="grid grid-cols-2 gap-8 ">
+                {/* Player Name */}
+                <div className="flex flex-col ">
+                  <label htmlFor="playerName" className="font-medium py-2">
+                    Player Name
+                  </label>
+                  <input
+                    id="playerName"
+                    type="text"
+                    placeholder="Enter player name"
+                    {...register("playerName", {
+                      required: "Player name is required",
+                    })}
+                    className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
+                  />
+                  {errors.playerName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.playerName.message}
+                    </p>
+                  )}
+                </div>
 
-              {/* Role */}
-              <label htmlFor="role" className="font-medium">
-                Role
-              </label>
-              <select
-                id="role"
-                {...register("role", { required: "Role is required" })}
-                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
-              >
-                <option value="batsman">Batsman</option>
-                <option value="bowler">Bowler</option>
-                <option value="all-rounder">All-Rounder</option>
-                <option value="wicket-keeper">Wicket Keeper</option>
-              </select>
-              {errors.role && (
-                <p className="text-red-500 text-sm">{errors.role.message}</p>
-              )}
+                {/* Role */}
+                <div className="flex flex-col ">
+                  <label htmlFor="role" className="font-medium py-2">
+                    Role
+                  </label>
+                  <select
+                    id="role"
+                    {...register("role", { required: "Role is required" })}
+                    className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
+                  >
+                    <option value="batsman">Batsman</option>
+                    <option value="bowler">Bowler</option>
+                    <option value="all-rounder">All-Rounder</option>
+                    <option value="wicket-keeper">Wicket Keeper</option>
+                  </select>
+                  {errors.role && (
+                    <p className="text-red-500 text-sm">
+                      {errors.role.message}
+                    </p>
+                  )}
+                </div>
+              </div>
 
               {/* Batting Style */}
-              <label htmlFor="battingStyle" className="font-medium">
-                Batting Style
-              </label>
-              <input
-                id="battingStyle"
-                type="text"
-                placeholder="e.g. Right-hand bat"
-                {...register("battingStyle")}
-                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
-              />
+              <div className="grid grid-cols-2 gap-8 ">
+                <div className="flex flex-col">
+                  <label htmlFor="battingStyle" className="font-medium py-2">
+                    Batting Style
+                  </label>
+                  <input
+                    id="battingStyle"
+                    type="text"
+                    placeholder="e.g. Right-hand bat"
+                    {...register("battingStyle")}
+                    className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
+                  />
+                </div>
 
-              {/* Bowling Style */}
-              <label htmlFor="bowlingStyle" className="font-medium">
-                Bowling Style
-              </label>
-              <input
-                id="bowlingStyle"
-                type="text"
-                placeholder="e.g. Right-arm fast"
-                {...register("bowlingStyle")}
-                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
-              />
+                <div className="flex flex-col">
+                  {/* Bowling Style */}
+                  <label htmlFor="bowlingStyle" className="font-medium py-2">
+                    Bowling Style
+                  </label>
+                  <input
+                    id="bowlingStyle"
+                    type="text"
+                    placeholder="e.g. Right-arm fast"
+                    {...register("bowlingStyle")}
+                    className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
+                  />
+                </div>
+              </div>
 
-              {/* Jersey Number */}
-              <label htmlFor="jerseyNumber" className="font-medium">
-                Jersey Number
-              </label>
-              <input
-                id="jerseyNumber"
-                type="number"
-                placeholder="Enter jersey number"
-                {...register("jerseyNumber")}
-                className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none"
-              />
+              <div className="grid grid-cols-2 gap-8">
+                <div className="felx flex-col">
+                  <label htmlFor="jerseyNumber" className="font-medium">
+                    Jersey Number
+                  </label>
+                  <input
+                    id="jerseyNumber"
+                    type="number"
+                    placeholder="Enter jersey number"
+                    {...register("jerseyNumber")}
+                    className="px-4 py-2 rounded bg-gray-200 w-full border-none outline-none mt-2"
+                  />
+                </div>
 
+                <div className="felx flex-col">
+                  <label htmlFor="profilePic" className="font-medium">
+                    Profile Photo
+                  </label>
+                  <input
+                    type="file"
+                    id="profilePic"
+                    accept="image/*"
+                    {...register("profilePic")}
+                    className="px-10 py-2 w-full bg-gray-400 cursor-pointer rounded mt-2"
+                  />
+                  {errors.profilePic && (
+                    <p className="text-red-500 text-sm">
+                      {errors.profilePic.message}
+                    </p>
+                  )}
+                </div>
+              </div>
               {/* Hidden Team ID (from props) */}
               <input type="hidden" value={id} {...register("teamId")} />
 
-              <label htmlFor="profilePic" className="font-medium">
-                Profile Photo
-              </label>
-              <input
-                type="file"
-                id="profilePic"
-                accept="image/*"
-                {...register("profilePic")}
-                className="px-10 py-2 w-full bg-gray-400 cursor-pointer rounded"
-              />
-              {errors.profilePic && (
-                <p className="text-red-500 text-sm">
-                  {errors.profilePic.message}
-                </p>
-              )}
-
               {/* Buttons */}
-              <div className="flex w-full gap-4 pt-2">
+              <div className="flex w-full gap-4 pt-4">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-6 py-2 bg-blue-900 w-full rounded-xl text-white font-medium "
+                  className="px-6 py-2 bg-blue-900 w-full rounded-xl text-white font-medium  cursor-pointer transition-all ease-in-out duration-300 hover:bg-blue-700"
                 >
                   Reset
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-green-600 w-full rounded-xl text-white font-medium"
+                  className="px-6 py-2 bg-green-600 w-full rounded-xl text-white font-medium cursor-pointer transition-all ease-in-out duration-300 hover:bg-green-800"
                 >
                   Submit
                 </button>
@@ -242,7 +267,7 @@ const Players = () => {
         {players && players.length > 0 ? (
           // ✅ Players Available
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {players.map(({ _id: id, playerName }) => (
+            {players.map(({ _id: id, playerName, profilePic }) => (
               // <div
               //   key={id}
               //   className="w-[320px] max-w-xs bg-white rounded-2xl overflow-hidden shadow-md cursor-pointer transition-shadow ease-in-out duration-300 hover:shadow-lg"
@@ -286,7 +311,11 @@ const Players = () => {
               // </div>
               <div className="flex w-46 p-6 bg-white h-auto" key={id}>
                 <img
-                  src="https://imgs.search.brave.com/EdUDgFxOWJY4ctoYqC0PihEVUkN0lMop-fUM2qHRDc4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9m/cm9udC12aWV3LW1h/bGUtcnVnYnktcGxh/eWVyLWhvbGRpbmct/YmFsbC13aXRoLWNv/bG9yLWVmZmVjdF8y/My0yMTQ4NzkzMzIy/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDA"
+                  src={
+                    profilePic
+                      ? profilePic
+                      : "https://imgs.search.brave.com/EdUDgFxOWJY4ctoYqC0PihEVUkN0lMop-fUM2qHRDc4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9m/cm9udC12aWV3LW1h/bGUtcnVnYnktcGxh/eWVyLWhvbGRpbmct/YmFsbC13aXRoLWNv/bG9yLWVmZmVjdF8y/My0yMTQ4NzkzMzIy/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDA"
+                  }
                   alt=""
                   className="w-24 h-24 rounded-full"
                 />
@@ -300,26 +329,19 @@ const Players = () => {
           // ❌ No Players Created Message
           <div className="flex flex-col items-center justify-center w-full text-center py-12">
             <img
-              src="https://cdn-icons-png.flaticon.com/512/7486/7486640.png"
+              src="/no-player.png"
               alt="No Players"
-              className="w-40 h-40 mb-4"
+              className="w-[300px] h-auto mb-4"
             />
-            <h2 className="text-xl font-semibold text-gray-700">
-              No players created
-            </h2>
-            <div className="flex justify-center items-center space-x-2 mt-2">
-              <p className="text-gray-500 ">Click To</p>
-              <span
-                className="w-6 h-6 bg-green-600 rounded-full p-2 text-white font-semibold flex justify-center items-center cursor-pointer"
-                onClick={() => setModelBg(!modelBg)}
-              >
-                +
-              </span>
-              <p>Create Players</p>
-            </div>
           </div>
         )}
       </div>
+      <span
+        className="w-14 h-14 text-3xl bg-green-600 rounded-full p-2 text-white font-semibold flex justify-center items-center cursor-pointer bottom-10 absolute right-14"
+        onClick={() => setModelBg(!modelBg)}
+      >
+        +
+      </span>
     </div>
   );
 };
