@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Players = () => {
   const apiBaseUrl = import.meta.env.VITE_BASE_URL;
@@ -8,20 +10,38 @@ const Players = () => {
   const [players, setPlayers] = useState([]);
   const { id } = useParams();
 
+  const playerSchema = z.object({
+    playerName: z.string().min(1, { message: "Player name is required" }),
+
+    role: z.enum(["batsman", "bowler", "all-rounder", "wicket-keeper"], {
+      errorMap: () => ({ message: "Select a valid player role" }),
+    }),
+
+    teamId: z.string().min(1, { message: "Team is required" }),
+
+    battingStyle: z.string().optional(),
+
+    bowlingStyle: z.string().optional(),
+
+    jerseyNumber: z
+      .union([z.string(), z.number()])
+      .optional()
+      .refine((val) => val === undefined || !isNaN(Number(val)), {
+        message: "Jersey number must be a number",
+      }),
+
+    profilePic: z.custom((val) => val instanceof FileList && val.length > 0, {
+      message: "Profile picture is required",
+    }),
+  });
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      playerName: "",
-      role: "batsman",
-      battingStyle: "",
-      bowlingStyle: "",
-      jerseyNumber: "",
-      teamId: "", // pass from props
-    },
+    resolver: zodResolver(playerSchema),
   });
 
   const handleReset = () => reset();
@@ -42,8 +62,37 @@ const Players = () => {
 
   console.log(players);
 
-  const submitData = (data) => {
+  const submitData = async (data) => {
     console.log(data);
+    const formData = new FormData();
+
+    for (const key in data) {
+      const value = data[key];
+
+      if (key === "profilePic" && value instanceof FileList) {
+        formData.append("profilePic", value[0]);
+      } else {
+        formData.append(key, value);
+      }
+    }
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/createPlayer`, {
+        method: "POST",
+
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("✅ Success:", data);
+      } else {
+        console.error("❌ Error:", data.message || "Upload failed");
+      }
+    } catch (err) {
+      console.error("❌ Network Error:", err);
+    }
   };
 
   return (
@@ -150,14 +199,30 @@ const Players = () => {
               />
 
               {/* Hidden Team ID (from props) */}
-              <input type="hidden" value={""} {...register("teamId")} />
+              <input type="hidden" value={id} {...register("teamId")} />
+
+              <label htmlFor="profilePic" className="font-medium">
+                Profile Photo
+              </label>
+              <input
+                type="file"
+                id="profilePic"
+                accept="image/*"
+                {...register("profilePic")}
+                className="px-10 py-2 w-full bg-gray-400 cursor-pointer rounded"
+              />
+              {errors.profilePic && (
+                <p className="text-red-500 text-sm">
+                  {errors.profilePic.message}
+                </p>
+              )}
 
               {/* Buttons */}
               <div className="flex w-full gap-4 pt-2">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-6 py-2 bg-blue-900 w-full rounded-xl text-white font-medium"
+                  className="px-6 py-2 bg-blue-900 w-full rounded-xl text-white font-medium "
                 >
                   Reset
                 </button>

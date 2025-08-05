@@ -5,7 +5,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-exports.upload = upload.single("image");
+exports.upload = upload.single("profilePic");
 
 exports.createPlayers = async (req, res) => {
   try {
