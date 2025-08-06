@@ -264,7 +264,7 @@ const Players = () => {
         </div>
       )}
 
-      <div className="flex justify-center py-10 items-center gap-10">
+      <div className="flex  py-10  gap-10">
         {players && players.length > 0 ? (
           // ✅ Players Available
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

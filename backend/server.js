@@ -7,7 +7,7 @@ const Players = require("./models/Players");
 const cors = require("cors");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
-
+const morgan = require("morgan");
 // Load .env file
 dotenv.config();
 
@@ -21,6 +21,7 @@ const API_SECRET = process.env.API_SECRET;
 // Middleware (optional if you're sending JSON later)
 app.use(express.json());
 app.use(cors());
+app.use(morgan("dev"));
 
 cloudinary.config({
   cloud_name: CLOUD_NAME,

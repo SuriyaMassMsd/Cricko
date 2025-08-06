@@ -1,9 +1,7 @@
-import React from "react";
-
 const PlayerCard = ({ data }) => {
   const { playerName, profilePic, role } = data;
   return (
-    <div className="px-10">
+    <div className="px-20">
       <div
         style={{
           background:

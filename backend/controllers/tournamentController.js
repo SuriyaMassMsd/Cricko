@@ -3,7 +3,7 @@ const tournament = require("../models/Tournament");
 exports.createTournament = async (req, res) => {
   try {
     const { name, matchType, startDate } = req.body;
-
+    console.log("destrered", name, matchType, startDate);
     const tournamentMatch = await tournament.create({
       name,
       matchType,
