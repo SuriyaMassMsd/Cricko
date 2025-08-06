@@ -4,16 +4,49 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const tournamentRoutes = require("./routes/tournamentRoutes");
 const Players = require("./models/Players");
-
+const cors = require("cors");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const morgan = require("morgan");
 // Load .env file
 dotenv.config();
 
 // Environment variables
 const PORT = process.env.SERVER_PORT || 5000;
 const MONGO_DB = process.env.DB_CONNECT;
+const CLOUD_NAME = process.env.CLOUD_NAME;
+const API_KEY = process.env.API_KEY;
+const API_SECRET = process.env.API_SECRET;
 
 // Middleware (optional if you're sending JSON later)
 app.use(express.json());
+app.use(cors());
+app.use(morgan("dev"));
+
+cloudinary.config({
+  cloud_name: CLOUD_NAME,
+  api_key: API_KEY,
+  api_secret: API_SECRET,
+});
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post("/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    res.status(400).json({ error: "No file uploaded" });
+  }
+
+  cloudinary.uploader
+    .upload_stream({ resource_type: "auto" }, (error, result) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error uploading to Cloudinary" });
+      }
+      res.json({ public_id: result.public_id, url: result.secure_url });
+    })
+    .end(req.file.buffer);
+});
 
 // Root route
 app.get("/", (req, res) => {
