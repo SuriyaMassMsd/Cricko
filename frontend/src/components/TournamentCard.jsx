@@ -6,7 +6,7 @@ const TournamentCard = ({ _id: id, name, matchType }) => {
   return (
     <div
       key={id}
-      onClick={() => navigate(`/players/${id}`)}
+      onClick={() => navigate(`/teams/${id}`)}
       className="cursor-pointer shadow-md hover:shadow-lg transition-shadow duration-300 rounded-lg bg-white overflow-hidden relative w-[350px]"
     >
       <img

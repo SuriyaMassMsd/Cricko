@@ -6,6 +6,12 @@ export const fetchTournaments = async () => {
   return res.json();
 };
 
+export const fetchTeams = async () => {
+  const res = await fetch(`${apiBaseUrl}/getTeams`);
+  if (!res.ok) throw new Error("Failed to fetch teams");
+  return res.json();
+};
+
 export const createTournament = async (tournament) => {
   const { name, matchType, startDate } = tournament;
 
@@ -17,6 +23,20 @@ export const createTournament = async (tournament) => {
     body: JSON.stringify({ name, matchType, startDate }),
   });
 
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Creation failed");
+  return data;
+};
+
+export const createTeams = async (teams) => {
+  // for (let pair of teams.entries()) {
+  //   console.log("Sending:", pair[0], pair[1]);
+  // }
+
+  const res = await fetch(`${apiBaseUrl}/createTeam`, {
+    method: "POST",
+    body: teams,
+  });
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || "Creation failed");
   return data;

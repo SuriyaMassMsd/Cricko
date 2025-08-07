@@ -88,6 +88,7 @@ const Players = () => {
 
       if (response.ok) {
         console.log("✅ Success:", data);
+        setModelBg(!modelBg);
       } else {
         console.error("❌ Error:", data.message || "Upload failed");
       }

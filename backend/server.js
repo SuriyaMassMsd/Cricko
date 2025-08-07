@@ -29,6 +29,9 @@ cloudinary.config({
   api_secret: API_SECRET,
 });
 
+const https = require("https");
+https.globalAgent.options.family = 4; // Skip IPv6
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 

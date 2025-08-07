@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Players from "./pages/Players.jsx";
+import Teams from "./pages/Teams.jsx";
 
 const route = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const route = createBrowserRouter([
   {
     path: "/players/:id",
     element: <Players />,
+  },
+  {
+    path: "/teams/:id",
+    element: <Teams />,
   },
 ]);
 

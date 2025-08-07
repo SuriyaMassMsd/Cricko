@@ -15,8 +15,10 @@ const {
   getPlayerByTeams,
   upload,
 } = require("../controllers/playersController");
+const { upload: uploadTeam } = require("../controllers/teamController");
+
 router.post("/createTournament", createTournament);
-router.post("/createTeam", createTeam);
+router.post("/createTeam", uploadTeam, createTeam);
 router.post("/createPlayer", upload, createPlayers);
 router.get("/getMatch", getTournaments);
 router.get("/getTeams", getTeams);
