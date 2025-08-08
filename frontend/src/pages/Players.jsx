@@ -61,8 +61,6 @@ const Players = () => {
     fetchPlayers();
   }, []);
 
-  console.log(players);
-
   const submitData = async (data) => {
     console.log(data);
     const formData = new FormData();
@@ -269,64 +267,11 @@ const Players = () => {
         {players && players.length > 0 ? (
           // ✅ Players Available
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {players.map((datas, i) => (
-              // <div
-              //   key={id}
-              //   className="w-[320px] max-w-xs bg-white rounded-2xl overflow-hidden shadow-md cursor-pointer transition-shadow ease-in-out duration-300 hover:shadow-lg"
-              // >
-              //   {/* Player Image */}
-              //   <img
-              //     src="https://imgs.search.brave.com/EdUDgFxOWJY4ctoYqC0PihEVUkN0lMop-fUM2qHRDc4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9m/cm9udC12aWV3LW1h/bGUtcnVnYnktcGxh/eWVyLWhvbGRpbmct/YmFsbC13aXRoLWNv/bG9yLWVmZmVjdF8y/My0yMTQ4NzkzMzIy/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDA"
-              //     alt="Player"
-              //     className="w-full h-52 object-cover"
-              //   />
-
-              //   {/* Player Info */}
-              //   <div className="p-4 flex flex-col items-center text-center">
-              //     <h2 className="text-xl font-bold text-gray-900">
-              //       {playerName}
-              //     </h2>
-              //     <span className="bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full mt-1">
-              //       INDIA
-              //     </span>
-
-              //     {/* Stats */}
-              //     <div className="w-full grid grid-cols-2 gap-4 mt-4 text-sm">
-              //       <div>
-              //         <p className="text-gray-500">Matches</p>
-              //         <p className="font-bold text-lg text-gray-800">274</p>
-              //       </div>
-              //       <div>
-              //         <p className="text-gray-500">Runs</p>
-              //         <p className="font-bold text-lg text-gray-800">10673</p>
-              //       </div>
-              //       <div>
-              //         <p className="text-gray-500">Average</p>
-              //         <p className="font-bold text-lg text-gray-800">49.9</p>
-              //       </div>
-              //       <div>
-              //         <p className="text-gray-500">Strike Rate</p>
-              //         <p className="font-bold text-lg text-gray-800">93.8</p>
-              //       </div>
-              //     </div>
-              //   </div>
-              // </div>
-              // <div className="flex w-46 p-6 bg-white h-auto" key={id}>
-              //   <img
-              //     src={
-              //       profilePic
-              //         ? profilePic
-              //         : "https://imgs.search.brave.com/EdUDgFxOWJY4ctoYqC0PihEVUkN0lMop-fUM2qHRDc4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9m/cm9udC12aWV3LW1h/bGUtcnVnYnktcGxh/eWVyLWhvbGRpbmct/YmFsbC13aXRoLWNv/bG9yLWVmZmVjdF8y/My0yMTQ4NzkzMzIy/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDA"
-              //     }
-              //     alt=""
-              //     className="w-24 h-24 rounded-full"
-              //   />
-              //   <h2 className="text-xl font-bold text-gray-900">
-              //     {playerName}
-              //   </h2>
-              // </div>
-              <PlayerCard data={datas} key={i} />
-            ))}
+            {players
+              .filter((player) => player.teamId === id)
+              .map((datas, i) => (
+                <PlayerCard data={datas} key={i} />
+              ))}
           </div>
         ) : (
           // ❌ No Players Created Message
