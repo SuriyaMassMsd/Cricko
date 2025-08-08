@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, press } from "framer-motion";
 import { useState } from "react";
 
 motion;
@@ -12,12 +12,16 @@ const ScoreUi = () => {
   const [overs, setOvers] = useState(0);
   const [balls, setBalls] = useState(0);
   const [target, setTarget] = useState(0);
+  const [extraRuns, setExtraRuns] = useState(0);
+  const [wideNoBye, setWideNoBye] = useState(false);
   const [extras, setExtras] = useState({
-    wide: 2,
-    noball: 2,
-    byes: 1,
-    legbyes: 3,
+    wide: 0,
+    noball: 0,
+    byes: 0,
+    legbyes: 0,
   });
+
+  console.log(wideNoBye);
 
   const ballsTotal = overs * 6 + balls;
   const oversDisplay = `${overs}.${balls}`;
@@ -37,6 +41,8 @@ const ScoreUi = () => {
   const tossWinBy = () => {
     setToss(teamName);
   };
+
+  console.log(extras);
 
   function addBallAndMaybeOver(extraBall = false) {
     if (extraBall) return;
@@ -62,11 +68,18 @@ const ScoreUi = () => {
     });
   };
 
-  const addExtra = (extrasRuns, runs) => {
-    if (extrasRuns === "wide") {
-      addRuns(1 + runs);
-    }
-    console.log(extrasRuns);
+  console.log(extraRuns);
+
+  const addExtra = (type) => {
+    setWideNoBye(!wideNoBye);
+    setExtras((ex) => ({ ...ex, [type]: ex[type] + 1 }));
+  };
+
+  const removeExtraOption = (run = 0) => {
+    const runs = run + 1;
+    setScore((prev) => prev + runs);
+    setWideNoBye(!wideNoBye);
+    // setScore;
   };
 
   return (
@@ -98,7 +111,7 @@ const ScoreUi = () => {
         </header>
 
         <main className="grid grid-cols-12 gap-4">
-          <section className="col-span-12 lg-col-span-6 bg-white/3 rounded-3xl p-6 backdrop-blur shadow-2xl ">
+          <section className="col-span-12 lg:col-span-6 bg-white/3 rounded-3xl p-6 backdrop-blur shadow-2xl ">
             <div className="flex justify-between items-center">
               <div className="flex justify-start items-center">
                 <div>
@@ -212,16 +225,27 @@ const ScoreUi = () => {
               <h2 className="text-lg font-bold mb-2">Controls</h2>
 
               <div className="grid grid-cols-3 gap-3">
-                {[0, 1, 2, 3, 4, 5, 6].map((run) => (
-                  <motion.button
-                    whileTap={{ scale: 0.96 }}
-                    key={run}
-                    onClick={() => addRuns(run)}
-                    className="py-3 rounded-xl bg-gradient-to-r from-emerald-400/20 to-indigo-400/10 border border-white/6 shadow-inner font-bold u"
-                  >
-                    {run}
-                  </motion.button>
-                ))}
+                {wideNoBye
+                  ? [0, 1, 2, 3, 4, 5, 6].map((run) => (
+                      <motion.button
+                        whileTap={{ scale: 0.96 }}
+                        key={run}
+                        onClick={() => removeExtraOption(run)}
+                        className="py-3 rounded-xl bg-gradient-to-r from-emerald-400/20 to-indigo-400/10 border border-white/6 shadow-inner font-bold u"
+                      >
+                        {run}
+                      </motion.button>
+                    ))
+                  : [0, 1, 2, 3, 4, 5, 6].map((run) => (
+                      <motion.button
+                        whileTap={{ scale: 0.96 }}
+                        key={run}
+                        onClick={() => addRuns(run)}
+                        className="py-3 rounded-xl bg-gradient-to-r from-emerald-400/20 to-indigo-400/10 border border-white/6 shadow-inner font-bold u"
+                      >
+                        {run}
+                      </motion.button>
+                    ))}
               </div>
 
               <div className="mt-4 grid grid-cols-3 gap-3">
@@ -232,13 +256,13 @@ const ScoreUi = () => {
                   Wide
                 </button>
                 <button
-                  // onClick={() => addExtra("noball")}
+                  onClick={() => addExtra("noball")}
                   className="py-3 rounded-xl bg-pink-400/10 border border-pink-300/10"
                 >
                   No ball
                 </button>
                 <button
-                  // onClick={() => addExtra("byes")}
+                  onClick={() => addExtra("byes")}
                   className="py-3 rounded-xl bg-sky-400/10 border border-sky-300/10"
                 >
                   Byes
