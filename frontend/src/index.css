@@ -1,1 +1,12 @@
+.my-scroll::-webkit-scrollbar {
+  width: 2px;
+}
+.my-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.my-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff3e9d, #0e1f40);
+  border-radius: 10px;
+}
+
 @import "tailwindcss";

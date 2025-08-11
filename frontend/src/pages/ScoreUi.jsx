@@ -20,8 +20,7 @@ const ScoreUi = () => {
     byes: 0,
     legbyes: 0,
   });
-
-  console.log(wideNoBye);
+  const [timeline, setTimeLine] = useState([]);
 
   const ballsTotal = overs * 6 + balls;
   const oversDisplay = `${overs}.${balls}`;
@@ -29,8 +28,22 @@ const ScoreUi = () => {
   const required = runsToWin === 0 ? "Target Achieved" : `${runsToWin} runs`;
 
   const [batsmen, setBatsmen] = useState([
-    { id: 1, name: "S. Kumar", runs: 64, balls: 54, strike: true },
-    { id: 2, name: "R. Iyer", runs: 22, balls: 18, strike: false },
+    {
+      id: 1,
+      name: "S. Kumar",
+      runs: 0,
+      balls: 0,
+      strike: true,
+      outOrNot: false,
+    },
+    {
+      id: 2,
+      name: "R. Iyer",
+      runs: 0,
+      balls: 0,
+      strike: false,
+      outOrNot: false,
+    },
   ]);
 
   const [bowlers, setBowlers] = useState([
@@ -42,14 +55,16 @@ const ScoreUi = () => {
     setToss(teamName);
   };
 
-  console.log(extras);
-
   function addBallAndMaybeOver(extraBall = false) {
-    if (extraBall) return;
+    if (extraBall) {
+      return;
+    }
 
     setOvers((prev) => {
       if (prev + 1 >= 6) {
-        setOvers((o) => o + 1);
+        setOvers((o) => {
+          return o + 1;
+        });
         return 0;
       }
       return prev + 1;
@@ -57,29 +72,100 @@ const ScoreUi = () => {
   }
 
   const addRuns = (runs) => {
-    setScore((prev) => prev + runs);
+    setScore((prev) => {
+      setTimeLine((p) => [...p, runs]);
+      return prev + runs;
+    });
     setBalls((prev) => {
       if (prev + 1 >= 6) {
+        setTimeLine((p) => [...p, "|"]);
+
         setBalls((o) => o);
         addBallAndMaybeOver(false);
         return 0;
       }
       return prev + 1;
     });
-  };
 
-  console.log(extraRuns);
+    setBatsmen((list) => {
+      const newList = list.map((b) => {
+        if (b.strike && b.outOrNot == false)
+          return { ...b, runs: b.runs + runs, balls: b.balls + 1 };
+        return b;
+      });
+
+      return newList;
+    });
+
+    if (balls === 5) {
+      if (runs % 2 === 0) {
+        setBatsmen((list) =>
+          list.map((b) => (b.outOrNot ? b : { ...b, strike: !b.strike }))
+        );
+      }
+    } else {
+      if (runs % 2 === 1) {
+        setBatsmen((list) =>
+          list.map((b) => (b.outOrNot ? b : { ...b, strike: !b.strike }))
+        );
+      }
+    }
+  };
 
   const addExtra = (type) => {
     setWideNoBye(!wideNoBye);
-    setExtras((ex) => ({ ...ex, [type]: ex[type] + 1 }));
+    setExtras((ex) => {
+      if (type === "wide") {
+        setTimeLine((p) => [...p, "Wd"]);
+      } else if (type === "noball") {
+        setTimeLine((p) => [...p, "No"]);
+      } else {
+        setTimeLine((p) => [...p, "bys"]);
+      }
+      return { ...ex, [type]: ex[type] + 1 };
+    });
+  };
+
+  const addWicket = () => {
+    setWickets((w) => w + 1);
+    addBallAndMaybeOver(false);
+    setBatsmen((prevBastman) => {
+      const updatedBastman = prevBastman.map((b) => {
+        if (b.strike) {
+          const { strike, ...rest } = b;
+          return { ...rest, outOrNot: true };
+        }
+        return b;
+      });
+      return [
+        ...updatedBastman,
+        {
+          id: Date.now(),
+          name: "New batsman",
+          balls: 0,
+          strike: true,
+          runs: 0,
+          outOrNot: false,
+        },
+      ];
+    });
   };
 
   const removeExtraOption = (run = 0) => {
     const runs = run + 1;
-    setScore((prev) => prev + runs);
+    setScore((prev) => {
+      setTimeLine((p) => [...p, `+${run}`]);
+      return prev + runs;
+    });
     setWideNoBye(!wideNoBye);
-    // setScore;
+  };
+
+  const swapBatsMan = () => {
+    setBatsmen((b) => {
+      return b?.map((player) =>
+        player?.outOrNot ? player : { ...player, strike: !player.strike }
+      );
+    });
   };
 
   return (
@@ -162,7 +248,7 @@ const ScoreUi = () => {
               <div className="p-4 rounded-2xl shadow-2xl bg-gradient-to-b from-white/6 to-white/4 w-[120px] min-h-[120px]">
                 <h4 className="text-sm uppercase text-gray-300">Extras</h4>
                 <h1 className="text-2xl font-extrabold tracking-tight mt-1">
-                  0
+                  {extras.wide + extras.noball + extras.byes}
                 </h1>
               </div>
 
@@ -192,6 +278,26 @@ const ScoreUi = () => {
             </div>
             <div className="mt-6">
               <h3 className="text-sm text-slate-300 mb-2">On Strike</h3>
+
+              <div
+                onClick={() => swapBatsMan()}
+                className="mb-2 cursor-pointer"
+              >
+                Swap Bastman
+              </div>
+
+              <div className="flex flex-row items-center justify-start gap-2 mb-4 overflow-y-auto my-scroll">
+                {timeline.map((t, i) => {
+                  return (
+                    <div
+                      className="flex flex-row justify-start items-center"
+                      key={i}
+                    >
+                      <span>{t}</span>
+                    </div>
+                  );
+                })}
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 {batsmen.map((b) => (
                   <div
@@ -200,9 +306,12 @@ const ScoreUi = () => {
                       b.strike
                         ? "bg-indigo-700/30 border border-indigo-400/20"
                         : "bg-white/3"
-                    }`}
+                    } `}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between relative">
+                      <span className="absolute top-1 right-1">
+                        {b.outOrNot && "Out"}
+                      </span>
                       <div>
                         <div className="font-semibold">{b.name}</div>
                         <div className="text-sm text-slate-300">
@@ -271,7 +380,7 @@ const ScoreUi = () => {
 
               <div className="mt-4 flex gap-3">
                 <button
-                  // onClick={() => addWicket()}
+                  onClick={() => addWicket()}
                   className="flex-1 py-3 rounded-xl bg-red-500/10 border border-red-400/10"
                 >
                   Wicket
@@ -280,12 +389,12 @@ const ScoreUi = () => {
 
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <div className="p-3 rounded-xl bg-white/5">
-                  <div className="text-xs text-slate-300">Overs</div>
-                  <div className="text-xl font-bold">24</div>
+                  <div className="text-xs text-slate-300">Overs in hands</div>
+                  <div className="text-xl font-bold">{overs - overs}</div>
                 </div>
                 <div className="p-3 rounded-xl bg-white/5">
-                  <div className="text-xs text-slate-300">Wickets</div>
-                  <div className="text-xl font-bold">10</div>
+                  <div className="text-xs text-slate-300">Wickets in hands</div>
+                  <div className="text-xl font-bold">{10 - wickets}</div>
                 </div>
               </div>
             </div>
